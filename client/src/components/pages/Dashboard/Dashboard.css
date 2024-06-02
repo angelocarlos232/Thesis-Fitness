@@ -1,0 +1,80 @@
+.minor-details{
+    width: 100%;
+    background: #2b2b2b;
+    display: flex;
+    padding-left: 10px;
+    padding-right: 10px;
+    padding-top: 10px;
+    padding-bottom: 10px;
+    border-radius: 15px;
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr)) 0.5fr;
+    color: white;
+}
+
+.column{
+    border-right: 1px solid #cc0000;
+}
+.column-button{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.column-button button{
+    padding-left: 20px;
+    padding-right: 20px;
+    background: #cc0000;
+    color: white;
+    padding-top: 5px;
+    padding-bottom: 5px;
+    border-radius: 15px;
+}
+
+
+.dash-contents{
+    margin-top: 10px;
+    color: white;
+    display: grid;
+    grid-template-columns: 2fr 2fr;
+    gap: 10px;
+}
+
+.dash-1{
+    height: 380px;
+    border-radius: 15px;
+    background: #2b2b2b;
+    padding-left: 20px;
+    padding-right: 20px;
+    padding-top: 5px;
+}
+
+.dash-2{
+    height: 380px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.dash-2 > div{
+    flex-grow: 1;
+}
+
+.dash-2-1{
+    background: #2b2b2b;
+    border-radius: 15px;
+    padding-left: 20px;
+    padding-right: 20px;
+    padding-top: 5px;
+    padding-bottom: 20px;
+}
+
+.dash-2-2{
+    background: #2b2b2b;
+    border-radius: 15px;
+    padding-left: 20px;
+    padding-right: 20px;
+    padding-top: 5px;
+    padding-bottom: 20px;
+}
+
+
