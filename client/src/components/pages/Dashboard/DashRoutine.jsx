@@ -91,7 +91,7 @@ const DashRoutine = () => {
               Day {index + 1}: <span className="text-white">{workout.workout_type}</span>
             </p>
           </div>
-          <div className="exercise-container grid grid-cols-2 gap-4 mx-10">
+          <div className="exercise-container grid grid-cols-2 gap-4 mx-20">
             {workout.exercises.map((exercise, exerciseIndex) => (
               <div key={exercise.name} className="exercise-item">
                 <p className="text-base font-semibold pt-2">
