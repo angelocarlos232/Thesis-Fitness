@@ -14,7 +14,9 @@ import getFatBurnWorkout from '@/utils/caulculators/fatburn';
 import ProgramPage from '@/app/(home)/program/[slug]/page'
 
 export async function POST(request: Request): Promise<any> {
-  // get data from request
+  
+  //const { id: userid } = request.query;
+
   let error: any = null;
   let result: any = {};
   await request
@@ -44,6 +46,7 @@ export async function POST(request: Request): Promise<any> {
       { status: 400 },
     );
   }
+
   // overview data
   const overview = {
     name: result.name || null,
@@ -70,12 +73,23 @@ export async function POST(request: Request): Promise<any> {
     workout = getFatBurnWorkout(overview.workout_days);
   }
 
+  // get data from request
+  const url = new URL(request.url);
+  // Extract the pathname
+  const pathname = url.pathname;
+  // Split the pathname by '/' and get the last segment
+  const segments = pathname.split('/');
+  const userID = segments[segments.length - 1];
+
+  //const userID = url.searchParams.get('id');
+  console.log(userID)
+  
   // Diet Macros
   const diet = {
 
   };
   // save data to DB
-  const userid = "useridtest"
+  //const userID = "asd"
   const prisma = new PrismaClient();
   const slug = result.name
     ? result.name + uuidv4().substring(0, 4)
@@ -91,6 +105,18 @@ export async function POST(request: Request): Promise<any> {
     })
     .then(() => console.log('DATA ADDED TO DB'))
     .catch((err) => console.log(err));
+
+    await prisma.user.update({
+      where: { id: userID },
+      data: {
+        slug,
+        diet,
+        overview,
+        workout,
+      }
+    }
+  )
+    
     
     await prisma.combine
     .create({
@@ -99,13 +125,15 @@ export async function POST(request: Request): Promise<any> {
         diet: {},
         overview,
         workout,
-        userID: userid
+        userID,
       },
     })
     .then(() => console.log('DATA ADDED TO Combine'))
     .catch((err) => console.log(err));
 
+    
   return NextResponse.json({
     slug,
+    userID,
   });
 }

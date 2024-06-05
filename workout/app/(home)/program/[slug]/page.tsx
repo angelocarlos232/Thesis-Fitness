@@ -1,3 +1,4 @@
+
 // imports
 import { Separator } from '@/components/ui/separator';
 import { AiFillYoutube } from 'react-icons/ai';
@@ -39,6 +40,8 @@ import {
   SheetTrigger,
 } from '@/components/ui/sheet';
 import CopyLink from '@/components/copy';
+import { useRouter } from 'next/router';
+
 
 const prisma = new PrismaClient();
 
@@ -97,6 +100,15 @@ export default async function ProgramPage({
     ideal_weight,
     workout_days: data.overview.workout_days,
   });
+
+  const asd = searchParams.id;
+
+
+  // const startButton = () => {
+  //   window.location.href = 'http://localhost:5173/dashboard/' + asd;  
+  //   console.log(asd)}
+
+  
 
   return (
     <div className="px-6 xl:w-3/4 mx-auto py-10 flex flex-col gap-20 text-md">
@@ -433,7 +445,7 @@ export default async function ProgramPage({
 
         {/* Calories */}
         <div className="flex flex-col gap-5 w-full h-full">
-          <h3 className="text-xl font-semibold">Daily Caloric {searchParams.level}</h3>
+          <h3 className="text-xl font-semibold">Daily Caloric Goal</h3>
           <div className="text-3xl font-semibold text-emerald-500">
             {ideal_weight < data.overview.weight && calory_data.lose_05}
             {ideal_weight > data.overview.weight && calory_data.gain_05}
@@ -709,8 +721,17 @@ export default async function ProgramPage({
               </ul>
             </div>
           </div>
+          
         </div>
       </div>
+      <div>
+        <Link href={`http://localhost:5173/dashboard/${asd}`}>
+          <button className='text-white p-5 bg-slate-500 rounded-xl'>
+          Go back to Dashboard
+          </button></Link>
+      </div>
+
+
 
     </div>
   );

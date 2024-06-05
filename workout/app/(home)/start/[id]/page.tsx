@@ -23,29 +23,15 @@ import { PrismaClient } from '@prisma/client';
 export default function Home({params}) {
   const id = params.id
 
-  const prisma = new PrismaClient();
-
-  const adduserId = async() => {
-    await prisma.combine
-    .create({
-      data: {
-        userID: id
-      },
-    })
-    .then(() => console.log('DATA ADDED TO Combine'))
-    .catch((err) => console.log(err));
-
-  } 
-
-
   // variables
   const {
-    step_num, loadComponent, steps_list, getAllAnswers,
+    step_num, loadComponent, steps_list, getAllAnswers, setUserId
   } = useContext(StepsContext);
   const [is_loading, setIsLoading] = useState<boolean>(false)
 
   // functions
   useEffect(() => {
+    setUserId(id);
     loadComponent('BasicInfoCard', BasicInfoCard);
     loadComponent('FitGoal', FitGoal);
     loadComponent('MedicalCard', MedicalCard);
@@ -56,9 +42,11 @@ export default function Home({params}) {
   }, []);
 
   const generateProgram = async () => {
+    
     try {
       setIsLoading(true)
       const response = await getAllAnswers()
+      setUserId("asdasjaojfwagn");
     } catch (err) {
       console.log(err)
     }

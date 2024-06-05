@@ -2,7 +2,7 @@
 
 // imports
 /* eslint-disable */
-import { ReactNode, createContext, useReducer, useEffect } from 'react';
+import { ReactNode, createContext, useReducer, useEffect, useState } from 'react';
 import type { stepsType } from '@/types.h';
 import steps_list from '@/steps';
 import Axios from 'axios';
@@ -138,8 +138,11 @@ function StepsProvider({ children }: { children: ReactNode }) {
     return search[0].answers;
   };
 
+  const [userId, setUserId] = useState(null);
+
   // get all questions
   const getAllAnswers = async (): Promise<any> => {
+    console.log(userId)
     let data = {};
     steps.steps_list.forEach((elt) => {
       const answers = elt.answers;
@@ -151,14 +154,14 @@ function StepsProvider({ children }: { children: ReactNode }) {
 
     const { data: response } = await Axios({
       method: 'POST',
-      url: '/api/generate',
+      url: `/api/${userId}`,
       data,
     }).catch((err) => {
       throw err;
     });
 
     const { slug } = response
-    router.push(`/program/${slug}?id={}`)
+    router.push(`/program/${slug}?id=${userId}`)
 
     return response;
   };
@@ -216,6 +219,8 @@ function StepsProvider({ children }: { children: ReactNode }) {
         getAllAnswers,
         blockNext,
         allowNext,
+        userId, 
+        setUserId,
       }}
     >
       {children}

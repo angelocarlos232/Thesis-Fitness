@@ -37,6 +37,7 @@ const register = async (req, res) => {
 
 const login = async (req, res) => {
   const { username, password } = req.body;
+  
 
   try {
     const user = await prisma.user.findUnique({ where: { username } });
@@ -44,6 +45,12 @@ const login = async (req, res) => {
     if (!user) {
       return res.json({ error: 'Invalid username or username does not exist' });
     }
+
+    const userID = user.id;
+
+
+
+
 
     const match = await bcrypt.compare(password, user.password);
 
@@ -60,4 +67,16 @@ const login = async (req, res) => {
   }
 };
 
-module.exports = { register, login };
+const signout = async( req,res) => {
+  try {
+    res.clearCookie('token');
+    console.log("token has been cleared")
+    res.json({ success: true });
+  } catch (error) {
+    res.status(500).json({ success: false, error: "Failed to clear token" });
+  }
+}
+
+
+
+module.exports = { register, login,signout };

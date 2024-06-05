@@ -35,11 +35,12 @@ function App() {
 
       <Routes>
         {/* Routes for unauthenticated users */}
+        <Route element={<PrivateRoute2 />}>
           <Route path="/" element={<MainLayout><Start /></MainLayout>} />
           <Route path="/authentication" element={<MainLayout><Authentication /></MainLayout>} />
           <Route path="/login" element={<MainLayout><Login /></MainLayout>} />
           <Route path="/register" element={<MainLayout><Register /></MainLayout>} />
-
+        </Route>
         {/* Routes for authenticated users */}
         <Route element={<PrivateRoute />}>
           <Route path="/dashboard/:userId" element={<MainLayout><Dashboard /></MainLayout>} />
