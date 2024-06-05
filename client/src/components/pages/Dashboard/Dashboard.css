@@ -110,3 +110,11 @@
   .full-screen-window{
     background: #2b2b2b;
   }
+
+  .workout-logging-container{
+    height: 450px;
+  }
+
+  .workout-logging-semicontainer{
+    overflow-y: auto;
+  }
