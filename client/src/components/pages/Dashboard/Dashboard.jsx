@@ -20,6 +20,8 @@ const Dashboard = () => {
     window.location.href = "http://localhost:3000/start/" + userId;
   };
 
+  const workoutItems = currentUser.workout
+
   return (
     <div className="mx-3 my-3">
       <div>
@@ -43,7 +45,7 @@ const Dashboard = () => {
             </div>
           </div>
           <div className="column-button ml-3">
-            <button onClick={startButton}>START</button>
+            {!workoutItems ? <><button onClick={startButton}>START</button></> : <></>}
           </div>
         </div>
 

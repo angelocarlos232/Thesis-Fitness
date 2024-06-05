@@ -126,7 +126,7 @@ const DashRoutine = () => {
             {workoutItems ? (
               <div className="workout-items">{workoutItems}</div>
             ) : (
-              <></>
+              <>No data yet</>
             )}
           </div>
           <div className="div-2 flex justify-center items-center pt-6">

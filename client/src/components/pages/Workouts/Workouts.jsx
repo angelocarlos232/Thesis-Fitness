@@ -92,6 +92,9 @@ const Workouts = () => {
                   ))}
                 </tbody>
               </table>
+              <div className='pt-3 flex justify-end'>
+                <button className='text-sm px-4 py-2 bg-red-600 rounded-lg'>Save</button>
+              </div>
             </div>
           ))}
 
@@ -132,6 +135,9 @@ const Workouts = () => {
                   ))}
                 </tbody>
               </table>
+              <div className='pt-3 flex justify-end'>
+                <button className='text-sm px-4 py-2 bg-red-600 rounded-lg'>Save</button>
+              </div>
             </div>
           ))}
 
@@ -172,6 +178,9 @@ const Workouts = () => {
                   ))}
                 </tbody>
               </table>
+              <div className='pt-3 flex justify-end'>
+                <button className='text-sm px-4 py-2 bg-red-600 rounded-lg'>Save</button>
+              </div>
             </div>
           ))}
 
@@ -214,6 +223,9 @@ const Workouts = () => {
                   ))}
                 </tbody>
               </table>
+              <div className='pt-3 flex justify-end'>
+                <button className='text-sm px-4 py-2 bg-red-600 rounded-lg'>Save</button>
+              </div>
             </div>
           ))}
         </div>
