@@ -76,7 +76,7 @@ const Menu = () => {
               <li className='flex items-center'>
                 <span className="icon-red"><FitnessCenterIcon style={{ fontSize: 30 }} /></span>
                 <Link to={`/workouts/${userId}`}>
-                <button><p className='ml-3'>Workouts</p></button></Link> 
+                <button><p className='ml-3'>Logs</p></button></Link> 
               </li>
               <li className='flex items-center'>
                 <span className="icon-red"><InfoIcon style={{ fontSize: 30 }} /></span>
