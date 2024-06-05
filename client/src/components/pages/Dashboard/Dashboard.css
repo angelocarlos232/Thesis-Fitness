@@ -78,3 +78,35 @@
 }
 
 
+.workout-container {
+    height: 280px; /* Set a fixed height for the container */
+    overflow-y: auto; /* Enable vertical scrolling */
+  }
+  
+  .workout-items {
+    height: auto; /* Ensure the height adjusts based on content */
+  }
+
+  .bullet {
+    margin-right: 5px; /* Adjust margin as needed */
+  }
+  
+
+  .div-2 button{
+    padding-left: 20px;
+    padding-right: 20px;
+    background: #cc0000;
+    color: white;
+    padding-top: 5px;
+    padding-bottom: 5px;
+    border-radius: 15px;
+  }
+
+  .full-screen-bg{
+    /* background: #2b2b2b;
+    opacity: 0.7; */
+  }
+
+  .full-screen-window{
+    background: #2b2b2b;
+  }

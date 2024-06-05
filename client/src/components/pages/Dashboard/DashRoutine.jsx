@@ -1,49 +1,173 @@
-import React from 'react'
-import { useSelector } from 'react-redux';
-
+import React, { useState } from "react";
+import { useSelector } from "react-redux";
 
 const DashRoutine = () => {
-
   // const sampletext = "here is from database";
-  const {currentUser} = useSelector(state => state.user)
+  const { currentUser } = useSelector((state) => state.user);
 
-  const overviewItems = currentUser.overview ? Object.entries(currentUser.overview).map(([key, value]) => (
-    <div key={key}>
-      <p>{`${key}: ${value}`}</p>
+  const [isFullScreen, setIsFullScreen] = useState(false);
+
+  const handleFullScreen = () => {
+    setIsFullScreen(true);
+  };
+
+  const handleCloseFullScreen = () => {
+    setIsFullScreen(false);
+  };
+
+  const fitnessGoalMapping = {
+    burn_fats: "BURN FATS",
+    cardiovascular_health: "CARDIOVASCULAR HEALTH",
+    build_muscle: "BUILD MUSCLES",
+    // Add other mappings as needed
+  };
+
+  const fitnessGoalKey = currentUser.overview
+    ? currentUser.overview.fitness_goal
+    : null;
+  const fitnessGoal = fitnessGoalKey
+    ? fitnessGoalMapping[fitnessGoalKey] || "No fitness goal set"
+    : "No fitness goal set";
+
+  // FOR THE WORKOUT ROUTINE GENERATOR
+  const workoutItems = currentUser.workout ? (
+    <div className="h-full overflow-auto">
+      <div className="flex flex-col items-center pt-3 pb-3">
+        <p className="text-lg font-bold text-red-600 ">GOAL:</p>
+        <p
+          className="text-lg font-bold"
+          style={{ wordWrap: "break-word", textAlign: "center" }}
+        >
+          {fitnessGoal}
+        </p>
+      </div>
+      {currentUser.workout.map((workout, index) => (
+        <div key={index}>
+          <p className={`font-bold ${index !== 0 ? "pt-6" : "pt-2"}`}>
+            DAY {index + 1}: {workout.workout_type.toUpperCase()}
+          </p>
+          <div>
+            {workout.exercises.map((exercise, exerciseIndex) => (
+              <div key={exercise.name}>
+                <p className="text-sm font-bold pt-1">
+                  {exerciseIndex + 1}. {exercise.name}
+                </p>
+                <ul>
+                  <li className="text-sm">
+                    <span className="bullet">&#8226;</span> sets:{" "}
+                    {exercise.sets}
+                  </li>
+                  <li className="text-sm">
+                    <span className="bullet">&#8226;</span> reps:{" "}
+                    {exercise.reps}
+                  </li>
+                </ul>
+              </div>
+            ))}
+          </div>
+        </div>
+      ))}
     </div>
-  )) : null;
+  ) : null;
+
+  // FOR THE WORKOUT ROUTINE GENERATOR FULL SCREEN
+  const workoutItemsFullScreen = currentUser.workout
+  ? (
+    <div className="h-full overflow-auto">
+      <div>
+        <div className="flex justify-center items-center">
+          <div className="flex justify-center items-center pb-3 border-b-2 border-red-600" style={{ width: "60%" }}>
+            <p className="text-2xl font-bold text-white pt-3">
+              GOAL: {fitnessGoal}
+            </p>
+          </div>
+        </div>
+      </div>
+
+      {currentUser.workout.map((workout, index) => (
+        <div key={index}>
+          <div className="flex justify-center">
+            <p className={`font-bold pt-${index === 0 ? "3" : "10"} text-lg text-white`}>
+              Day {index + 1}: <span className="text-white">{workout.workout_type}</span>
+            </p>
+          </div>
+          <div className="exercise-container grid grid-cols-2 gap-4 mx-10">
+            {workout.exercises.map((exercise, exerciseIndex) => (
+              <div key={exercise.name} className="exercise-item">
+                <p className="text-base font-semibold pt-2">
+                  {exerciseIndex + 1}. {exercise.name}
+                </p>
+                <ul>
+                  <li className="text-base font-light">
+                    <span className="bullet">&#8226;</span> sets: {exercise.sets}
+                  </li>
+                  <li className="text-base font-light">
+                    <span className="bullet">&#8226;</span> reps: {exercise.reps}
+                  </li>
+                </ul>
+              </div>
+            ))}
+          </div>
+        </div>
+      ))}
+    </div>
+  )
+  : null;
 
 
   return (
-    <div className='w-full'>
-      <div className='dash-contents'>
-        <div className='dash-1'>
-            <div>
-                <p className='text-sm'>Workout Routine Recommendation:</p>
+    <div className="w-full">
+      <div className="dash-contents">
+        <div className="dash-1">
+          <div>
+            <p className="text-sm">Workout Routine Recommendation:</p>
+          </div>
+          <div className="workout-container flex-grow">
+            {workoutItems ? (
+              <div className="workout-items">{workoutItems}</div>
+            ) : (
+              <></>
+            )}
+          </div>
+          <div className="div-2 flex justify-center items-center pt-6">
+            <div className="h-full ">
+              <button onClick={handleFullScreen}>View in Full Screen</button>
             </div>
-            <div>
-              
-              {overviewItems ? <></> : <></>}
+          </div>
+
+          {isFullScreen && (
+            <div className="fixed top-0 left-0 w-full h-full bg-gray-900 bg-opacity-50 flex justify-center items-center">
+              <div className="full-screen-window  p-6 rounded-md w-11/12 h-5/6 overflow-auto">
+                <button
+                  className="absolute top-0 right-0 p-2 text-lg font-bold"
+                  onClick={handleCloseFullScreen}
+                >
+                  ×
+                </button>
+                <h2 className="text-2xl font-bold mb-2 text-red-600">
+                  Workout Routine Recommendation:
+                </h2>
+                <div className="text-white">{workoutItemsFullScreen}</div>
+              </div>
             </div>
-        
-        
-        
+          )}
         </div>
 
-
-        <div className='dash-2'>
-            <div className='dash-2-1'>
-                <div><p className='text-sm'>Progress Chart:</p></div>
+        <div className="dash-2">
+          <div className="dash-2-1">
+            <div>
+              <p className="text-sm">Progress Chart:</p>
             </div>
-            <div className='dash-2-2'>
-                <div><p className='text-sm'>Recommended Diet:</p></div>
-
+          </div>
+          <div className="dash-2-2">
+            <div>
+              <p className="text-sm">Recommended Diet:</p>
             </div>
+          </div>
         </div>
-        
       </div>
     </div>
-  )
-}
+  );
+};
 
-export default DashRoutine
+export default DashRoutine;
