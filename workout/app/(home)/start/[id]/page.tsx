@@ -68,7 +68,6 @@ export default function Home({params}) {
   return (
     
     <div className="w-full px-1 lg:w-3/4 2xl:w-2/4 mx-auto">
-      <div>{id}</div>
       <StepBar id={id} generateProgram={generateProgram} is_loading={is_loading} />
       {getStepComponent()}
     </div>

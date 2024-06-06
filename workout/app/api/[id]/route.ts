@@ -67,7 +67,7 @@ export async function POST(request: Request): Promise<any> {
   let workout: WorkoutProgram[] = [];
   if (overview.fitness_goal === 'build_muscle') {
     workout = getMuscleWorkout(overview.workout_days);
-  } else if (overview.fitness_goal === 'cardiovascular_health') {
+  } else if (overview.fitness_goal === 'cardiovascular') {
     workout = getCardiovascularWorkout(overview.workout_days);
   } else if (overview.fitness_goal === 'burn_fats') {
     workout = getFatBurnWorkout(overview.workout_days);

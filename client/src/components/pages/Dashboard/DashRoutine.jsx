@@ -17,7 +17,7 @@ const DashRoutine = () => {
 
   const fitnessGoalMapping = {
     burn_fats: "BURN FATS",
-    cardiovascular_health: "CARDIOVASCULAR HEALTH",
+    cardiovascular: "CARDIOVASCULAR HEALTH",
     build_muscle: "BUILD MUSCLES",
     // Add other mappings as needed
   };

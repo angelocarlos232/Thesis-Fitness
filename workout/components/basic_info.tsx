@@ -47,7 +47,7 @@ export default function BasicInfoCard({
           <Label htmlFor="name" className="text-md lg:text-lg">
             Name
             {' '}
-            <span className="text-neutral-500 text-xs lg:text-md">(optional)</span>
+            <span className="text-neutral-500 text-xs lg:text-md">(no sspaces)</span>
           </Label>
           <Input
             defaultValue={answers.name}

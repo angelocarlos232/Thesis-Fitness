@@ -68,7 +68,7 @@ export default function StepBar({
 
   return (
     <div
-      className={`border-t-2 py-3 px-8 bg-white bg-opacity-50 backdrop-blur-md z-50 fixed bottom-0 left-0 w-full flex ${
+      className={`py-3 px-8 bg-customGray backdrop-blur-md z-50 fixed bottom-0 left-0 w-full flex ${
         !is_previous_btn && is_next_btn ? 'justify-end' : 'justify-between'
       }`}
     >

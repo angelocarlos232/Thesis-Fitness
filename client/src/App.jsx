@@ -8,6 +8,7 @@ import Workouts from './components/pages/Workouts/Workouts';
 import { Toaster } from 'react-hot-toast';
 import axios from 'axios';
 import Login from './components/pages/Authentication/Login';
+import About from './components/pages/About/About'
 import Register from './components/pages/Authentication/Register';
 import PrivateRoute from './components/Private/PrivateRoute';
 import PrivateRoute2 from './components/Private/PrivateRoute2';
@@ -45,6 +46,7 @@ function App() {
         <Route element={<PrivateRoute />}>
           <Route path="/dashboard/:userId" element={<MainLayout><Dashboard /></MainLayout>} />
           <Route path="/workouts/:userId" element={<MainLayout><Workouts /></MainLayout>} />
+          <Route path="/about/:userId" element={<MainLayout><About /></MainLayout>} />
         </Route>
       </Routes>
     </Router>

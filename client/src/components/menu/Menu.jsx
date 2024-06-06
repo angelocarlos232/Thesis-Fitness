@@ -80,7 +80,7 @@ const Menu = () => {
               </li>
               <li className='flex items-center'>
                 <span className="icon-red"><InfoIcon style={{ fontSize: 30 }} /></span>
-                <Link to='/about'><button><p className='ml-3'>About</p></button></Link> 
+                <Link to={`/about/${userId}`}><button><p className='ml-3'>About</p></button></Link> 
               </li>
               <li className='flex items-center'>
                 <span className="icon-red"><SettingsIcon style={{ fontSize: 30 }} /></span>

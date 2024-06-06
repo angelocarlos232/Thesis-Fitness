@@ -30,10 +30,10 @@ export default function RootLayout({
         </Script>
       </head>
       <body
-        className={`${inter.className} bg-black text-neutral-50 mx-auto w-full overflow-x-hidden min-h-screen`}
+        className={`${inter.className} bg-customdarkGray text-neutral-50 mx-auto w-full overflow-x-hidden min-h-screen`}
       >
         <StepsProvider>
-          <Navbar className="px-5 lg:w-5/6 mx-auto" />
+          {/* <Navbar className="px-5 lg:w-5/6 mx-auto" /> */}
           <div className="flex flex-col gap-10 lg:py-10">{children}</div>
         </StepsProvider>
       </body>
