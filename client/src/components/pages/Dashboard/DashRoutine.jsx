@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { useSelector } from "react-redux";
+import YoutubeLogo from "./Youtube_logo.png";
 
 const DashRoutine = () => {
   // const sampletext = "here is from database";
@@ -70,13 +71,25 @@ const DashRoutine = () => {
     </div>
   ) : null;
 
+  const goToYoutube = () => {
+    const exerciseName = `${currentUser.slug}`;
+
+    const youtubeURL = `https://www.youtube.com/results?search_query=${encodeURIComponent(
+      exerciseName
+    )}`;
+
+    window.location.href = youtubeURL;
+  };
+
   // FOR THE WORKOUT ROUTINE GENERATOR FULL SCREEN
-  const workoutItemsFullScreen = currentUser.workout
-  ? (
+  const workoutItemsFullScreen = currentUser.workout ? (
     <div className="h-full overflow-auto">
       <div>
         <div className="flex justify-center items-center">
-          <div className="flex justify-center items-center pb-3 border-b-2 border-red-600" style={{ width: "60%" }}>
+          <div
+            className="flex justify-center items-center pb-3 border-b-2 border-red-600"
+            style={{ width: "60%" }}
+          >
             <p className="text-2xl font-bold text-white pt-3">
               GOAL: {fitnessGoal}
             </p>
@@ -87,22 +100,55 @@ const DashRoutine = () => {
       {currentUser.workout.map((workout, index) => (
         <div key={index}>
           <div className="flex justify-center">
-            <p className={`font-bold pt-${index === 0 ? "3" : "10"} text-lg text-white`}>
-              Day {index + 1}: <span className="text-white">{workout.workout_type}</span>
+            <p
+              className={`font-bold pt-${
+                index === 0 ? "3" : "10"
+              } text-lg text-white`}
+            >
+              Day {index + 1}:{" "}
+              <span className="text-white">{workout.workout_type}</span>
             </p>
           </div>
           <div className="exercise-container grid grid-cols-2 gap-4 mx-20">
             {workout.exercises.map((exercise, exerciseIndex) => (
               <div key={exercise.name} className="exercise-item">
                 <p className="text-base font-semibold pt-2">
-                  {exerciseIndex + 1}. {exercise.name}
+                  <a
+                    href={`https://www.youtube.com/results?search_query=${exercise.name}`}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    style={{
+                      display: "inline-flex",
+                      alignItems: "center",
+                      textDecoration: "none",
+                    }}
+                  >
+                    <span>
+                      {exerciseIndex + 1}. {exercise.name}
+                    </span>
+                    <span style={{ marginLeft: "5px" }}>
+                      <a
+                        href={`https://www.youtube.com/results?search_query=${exercise.name}`}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                      >
+                        <img
+                          src={YoutubeLogo}
+                          alt="YouTube Logo"
+                          style={{ width: "20px", height: "15px" }}
+                        />
+                      </a>
+                    </span>
+                  </a>
                 </p>
                 <ul>
                   <li className="text-base font-light">
-                    <span className="bullet">&#8226;</span> sets: {exercise.sets}
+                    <span className="bullet">&#8226;</span> sets:{" "}
+                    {exercise.sets}
                   </li>
                   <li className="text-base font-light">
-                    <span className="bullet">&#8226;</span> reps: {exercise.reps}
+                    <span className="bullet">&#8226;</span> reps:{" "}
+                    {exercise.reps}
                   </li>
                 </ul>
               </div>
@@ -111,14 +157,11 @@ const DashRoutine = () => {
         </div>
       ))}
     </div>
-  )
-  : null;
-
+  ) : null;
 
   return (
     <div className="w-full">
       <div className="dash-contents">
-
         {/* Workout Routine Generation */}
         <div className="dash-1">
           <div>
@@ -155,7 +198,6 @@ const DashRoutine = () => {
           )}
         </div>
 
-
         {/* Progress Chart */}
         <div className="dash-2">
           <div className="dash-2-1">
@@ -164,7 +206,7 @@ const DashRoutine = () => {
             </div>
           </div>
 
-        {/* Recommended Diet */}
+          {/* Recommended Diet */}
           <div className="dash-2-2">
             <div>
               <p className="text-sm">Calorie Tracking:</p>

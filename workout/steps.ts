@@ -1,6 +1,8 @@
 // imports
 import type { stepType } from '@/types.h';
 
+
+
 const steps_list: stepType[] = [
   {
     id: 'BasicInfoCard',

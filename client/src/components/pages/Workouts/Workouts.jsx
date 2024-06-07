@@ -156,18 +156,32 @@ const Workouts = () => {
 
   const calculateProgress = (weekNumber) => {
     const weekKey = `week${weekNumber}`;
-    const exercises = currentUser.workout[0].exercises; // Assuming the same exercises for all weeks
-    const totalExercises = 7 * exercises.length; // 7 days per week
+    const numDaysPerWeek = currentUser.overview ? currentUser.overview.workout_days : 7;
+    let totalExercises = 0;
+    let completedExercisesCount = 0;
 
-    const completedExercisesCount = Object.keys(completedExercises[weekKey] || {}).reduce(
-      (total, key) => completedExercises[weekKey][key] ? total + 1 : total,
-      0
-    );
+    for (let dayIndex = 0; dayIndex < numDaysPerWeek; dayIndex++) {
+      const exercises = currentUser.workout[dayIndex].exercises;
+      totalExercises += exercises.length;
+
+      exercises.forEach((exercise, exerciseIndex) => {
+        if (completedExercises[weekKey]?.[`${dayIndex}-${exerciseIndex}`]) {
+          completedExercisesCount++;
+        }
+      });
+    }
 
     return totalExercises ? (completedExercisesCount / totalExercises) * 100 : 0;
   };
 
+  const calculateOverallProgress = () => {
+    const progressArray = [1, 2, 3, 4].map(calculateProgress);
+    const totalProgress = progressArray.reduce((acc, weekProgress) => acc + weekProgress, 0);
+    return totalProgress / progressArray.length;
+  };
+
   const progress = calculateProgress(selectedWeek);
+  const overallProgress = calculateOverallProgress();
 
   return (
     <div className="workout-logging-container text-xs">
@@ -175,7 +189,10 @@ const Workouts = () => {
         <h1 className="text-3xl font-bold text-red-600">Workout Logging</h1>
         <div className="text-white">
           <h3 className="text-xl font-bold">GOAL: {fitnessGoal}</h3>
-          <h3 className="text-xl font-bold">Progress: {progress.toFixed(2)}%</h3>
+          <div className="flex justify-between mt-6">
+          <h3 className="text-xl font-medium">Weekly Progress: <span className="text-red-600 font-black">{progress.toFixed(2)}%</span></h3>
+          <h3 className="text-xl font-medium">Overall Progress: <span className="text-red-600 font-black">{overallProgress.toFixed(2)}%</span></h3>
+          </div>
           <div className="flex space-x-2 mt-4">
             {[1, 2, 3, 4].map((week) => (
               <button
