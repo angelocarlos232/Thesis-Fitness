@@ -118,6 +118,8 @@ const DashRoutine = () => {
   return (
     <div className="w-full">
       <div className="dash-contents">
+
+        {/* Workout Routine Generation */}
         <div className="dash-1">
           <div>
             <p className="text-sm">Workout Routine Recommendation:</p>
@@ -153,12 +155,16 @@ const DashRoutine = () => {
           )}
         </div>
 
+
+        {/* Progress Chart */}
         <div className="dash-2">
           <div className="dash-2-1">
             <div>
               <p className="text-sm">Progress Chart:</p>
             </div>
           </div>
+
+        {/* Recommended Diet */}
           <div className="dash-2-2">
             <div>
               <p className="text-sm">Recommended Diet:</p>

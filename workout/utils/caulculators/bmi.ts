@@ -1,12 +1,12 @@
 /* eslint-disable max-len */
-type bmiType = {
+export type bmiType = {
   height: number;
   weight: number;
   gender: 'M' | 'F';
   fitness_goal: 'build_muscle' | 'burn_fats' | 'endurance' | 'cardiovascular';
 };
 
-type responseType = {
+export type responseType = {
   status: 'healthy' | 'underweight' | 'overweight' | 'obese';
   bmi: number;
   underweight: string;

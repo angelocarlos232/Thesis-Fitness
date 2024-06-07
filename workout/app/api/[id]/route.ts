@@ -12,6 +12,8 @@ import getMuscleWorkout from '@/utils/caulculators/muscle';
 import getCardiovascularWorkout, { WorkoutProgram } from '@/utils/caulculators/cardio';
 import getFatBurnWorkout from '@/utils/caulculators/fatburn';
 import ProgramPage from '@/app/(home)/program/[slug]/page'
+import getBMI, { bmiType, responseType } from '@/utils/caulculators/bmi';
+
 
 export async function POST(request: Request): Promise<any> {
   
@@ -83,9 +85,39 @@ export async function POST(request: Request): Promise<any> {
 
   //const userID = url.searchParams.get('id');
   console.log(userID)
+
+    // Get diet macros
+    const bmiData: responseType = getBMI({
+      height: overview.height,
+      weight: overview.weight,
+      gender: overview.gender,
+      fitness_goal: overview.fitness_goal,
+    });
+  
+    const { ideal_weight } = bmiData;
+  
+    const calory_data = calculateCalories({
+      activity: overview.activity,
+      age: overview.age,
+      current_weight: overview.weight,
+      fitness_goal: overview.fitness_goal,
+      gender: overview.gender,
+      height: overview.height,
+      ideal_weight,
+      workout_days: overview.workout_days,
+    });
   
   // Diet Macros
   const diet = {
+    maintaining_weight: calory_data.calories,
+    lose_weight: calory_data.lose_05,
+    gain_weight: calory_data.gain_05,
+    protein_min: calory_data.protein_1,
+    protein_max: calory_data.protein_2,
+    fat_min: calory_data.fats_1,
+    fat_max: calory_data.fats_2,
+    carbs_min: calory_data.carbs_1,
+    carbs_max: calory_data.carbs_2,
 
   };
   // save data to DB
