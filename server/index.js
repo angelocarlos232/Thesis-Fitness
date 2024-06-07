@@ -5,6 +5,8 @@ const app = express();
 const cookieParser = require('cookie-parser')
 require('dotenv').config();
 
+
+
 // MIDDLEWARE
 app.use(cors({
   origin: 'http://localhost:5173',

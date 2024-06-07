@@ -71,15 +71,6 @@ const DashRoutine = () => {
     </div>
   ) : null;
 
-  const goToYoutube = () => {
-    const exerciseName = `${currentUser.slug}`;
-
-    const youtubeURL = `https://www.youtube.com/results?search_query=${encodeURIComponent(
-      exerciseName
-    )}`;
-
-    window.location.href = youtubeURL;
-  };
 
   // FOR THE WORKOUT ROUTINE GENERATOR FULL SCREEN
   const workoutItemsFullScreen = currentUser.workout ? (

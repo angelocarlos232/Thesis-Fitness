@@ -38,6 +38,7 @@
     "dayjs": "^1.11.10",
     "eslint-config-airbnb": "^19.0.4",
     "eslint-config-airbnb-typescript": "^17.1.0",
+    "firebase": "^10.12.2",
     "lottie-react": "^2.4.0",
     "lucide-react": "^0.279.0",
     "next": "latest",
