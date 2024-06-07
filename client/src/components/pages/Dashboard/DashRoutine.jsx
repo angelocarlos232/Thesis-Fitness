@@ -167,7 +167,7 @@ const DashRoutine = () => {
         {/* Recommended Diet */}
           <div className="dash-2-2">
             <div>
-              <p className="text-sm">Recommended Diet:</p>
+              <p className="text-sm">Calorie Tracking:</p>
             </div>
           </div>
         </div>

@@ -9,7 +9,7 @@ datasource db {
 }
 
 model User {
-  id        String?   @id @default(auto()) @map("_id") @db.ObjectId
+  id        String   @id @default(auto()) @map("_id") @db.ObjectId
   username  String?   @unique
   password  String?
   slug     String?
@@ -17,5 +17,6 @@ model User {
   workout  Json?
   diet     Json?
   userID   String?
+  progress  Json?
 }
 
