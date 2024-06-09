@@ -13,6 +13,7 @@ import Register from './components/pages/Authentication/Register';
 import PrivateRoute from './components/Private/PrivateRoute';
 import PrivateRoute2 from './components/Private/PrivateRoute2';
 import Settings from './components/pages/Settings/Settings'
+import Logins from './components/pages/Authentication/Logins'
 
 const MainLayout = ({ children }) => {
   return (
@@ -41,6 +42,7 @@ function App() {
           <Route path="/" element={<MainLayout><Start /></MainLayout>} />
           <Route path="/authentication" element={<MainLayout><Authentication /></MainLayout>} />
           <Route path="/login" element={<MainLayout><Login /></MainLayout>} />
+          <Route path="/logins" element={<MainLayout><Logins /></MainLayout>} />
           <Route path="/register" element={<MainLayout><Register /></MainLayout>} />
         </Route>
         {/* Routes for authenticated users */}

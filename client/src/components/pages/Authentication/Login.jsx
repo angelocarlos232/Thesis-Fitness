@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import toast from "react-hot-toast";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { signInSuccess } from "../../../redux/user/userSlice";
 import FaceLogo from "../../../assets/face.png";
@@ -55,14 +55,14 @@ const Login = ({ toggleForm }) => {
 
   const handleFaceClick = (e) => {
     e.preventDefault();
-    setShowWebcam(true);
-    navigator.mediaDevices.getUserMedia({ video: true, audio: false })
-     .then(stream => {
-        setVideoStream(stream);
-      })
-     .catch(error => {
-        console.error("Error accessing webcam:", error);
-      });
+    // setShowWebcam(true);
+    // navigator.mediaDevices.getUserMedia({ video: true, audio: false })
+    //  .then(stream => {
+    //     setVideoStream(stream);
+    //   })
+    //  .catch(error => {
+    //     console.error("Error accessing webcam:", error);
+    //   });
   };
 
   const handleSave = () => {
@@ -104,9 +104,9 @@ const Login = ({ toggleForm }) => {
                 <button onClick={loginHandler} style={{ flex: "2 5" }}>
                   Log In
                 </button>
+                <Link to = '/logins'>
                 <button
                   className="btn-img flex justify-center"
-                  onClick={handleFaceClick}
                   style={{ flex: "1" }}
                 >
                   <img
@@ -114,15 +114,10 @@ const Login = ({ toggleForm }) => {
                     style={{ filter: "brightness(0) invert(1)" }}
                   />
                 </button>
+                </Link>
               </div>
             </div>
           </form>
-          {showWebcam && (
-            <div className="webcam-container mt-6">
-              <video id="webcam-video" width="100%" height="100%"></video>
-              <button className="px-3 py-1 bg-red-600 rounded-lg text-white mt-6" onClick={handleSave}>Login</button>
-            </div>
-          )}
           <Button toggleForm={toggleForm} />
         </div>
       </div>
