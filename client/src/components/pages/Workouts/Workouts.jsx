@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from "react";
 import { useSelector } from "react-redux";
 import axios from 'axios';
+import { useDispatch } from "react-redux";
+import {setOverallProgress} from '../../../redux/user/userSlice'
 
 const fitnessGoalMapping = {
   burn_fats: "BURN FATS",
@@ -182,6 +184,10 @@ const Workouts = () => {
 
   const progress = calculateProgress(selectedWeek);
   const overallProgress = calculateOverallProgress();
+
+  const dispatch = useDispatch();
+  dispatch(setOverallProgress(overallProgress));
+  
 
   return (
     <div className="workout-logging-container text-xs">

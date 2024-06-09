@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { useSelector } from "react-redux";
 import YoutubeLogo from "./Youtube_logo.png";
+import CircularProgress from "@mui/material/CircularProgress"; // Import CircularProgress from Material UI
 
 const DashRoutine = () => {
   // const sampletext = "here is from database";
@@ -22,6 +23,8 @@ const DashRoutine = () => {
     build_muscle: "BUILD MUSCLES",
     // Add other mappings as needed
   };
+
+  const overallProgress = useSelector((state) => state.user.overallProgress);
 
   const fitnessGoalKey = currentUser.overview
     ? currentUser.overview.fitness_goal
@@ -71,7 +74,6 @@ const DashRoutine = () => {
     </div>
   ) : null;
 
-
   // FOR THE WORKOUT ROUTINE GENERATOR FULL SCREEN
   const workoutItemsFullScreen = currentUser.workout ? (
     <div className="h-full overflow-auto">
@@ -104,28 +106,27 @@ const DashRoutine = () => {
             {workout.exercises.map((exercise, exerciseIndex) => (
               <div key={exercise.name} className="exercise-item">
                 <p className="text-base font-semibold pt-2">
-                <a
-  href={`https://www.youtube.com/results?search_query=${exercise.name}`}
-  target="_blank"
-  rel="noopener noreferrer"
-  style={{
-    display: "inline-flex",
-    alignItems: "center",
-    textDecoration: "none",
-  }}
->
-  <span>
-    {exerciseIndex + 1}. {exercise.name}
-  </span>
-  <span style={{ marginLeft: "5px" }}>
-    <img
-      src={YoutubeLogo}
-      alt="YouTube Logo"
-      style={{ width: "20px", height: "15px" }}
-    />
-  </span>
-</a>
-
+                  <a
+                    href={`https://www.youtube.com/results?search_query=${exercise.name}`}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    style={{
+                      display: "inline-flex",
+                      alignItems: "center",
+                      textDecoration: "none",
+                    }}
+                  >
+                    <span>
+                      {exerciseIndex + 1}. {exercise.name}
+                    </span>
+                    <span style={{ marginLeft: "5px" }}>
+                      <img
+                        src={YoutubeLogo}
+                        alt="YouTube Logo"
+                        style={{ width: "20px", height: "15px" }}
+                      />
+                    </span>
+                  </a>
                 </p>
                 <ul>
                   <li className="text-base font-light">
@@ -189,6 +190,72 @@ const DashRoutine = () => {
           <div className="dash-2-1">
             <div>
               <p className="text-sm">Progress Chart:</p>
+              <div className="flex justify-center mt-6">
+                <div className="flex-col justify-center ">
+                  <div className="flex justify-center mb-3">
+                  <div
+                    className="flex justify-center items-center"
+                    style={{
+                      position: "relative",
+                      width: "120px",
+                      height: "120px",
+                    }}
+                  >
+                    {/* Main CircularProgress component */}
+                    <CircularProgress
+                      variant="determinate"
+                      value={overallProgress} // Pass overall progress percentage
+                      style={{
+                        position: "absolute",
+                        top: 0,
+                        left: 0,
+                        width: "100%",
+                        height: "100%",
+                        backgroundColor: "transparent", // Make the background transparent
+                        color: "#cc0000", // Set the color to #cc0000 (red)
+                      }}
+                    />
+
+                    {/* Secondary CircularProgress component for incomplete progress */}
+                    <CircularProgress
+                      variant="determinate"
+                      value={100} // Set to 100 to show full black track
+                      style={{
+                        position: "absolute",
+                        top: 0,
+                        left: 0,
+                        width: "100%",
+                        height: "100%",
+                        backgroundColor: "transparent", // Make the background transparent
+                        color: "black", // Set the color to black
+                        opacity: 0.1, // Adjust opacity if necessary
+                      }}
+                    />
+
+                    {/* Progress text */}
+                    <div
+                      style={{
+                        position: "absolute",
+                        top: "50%",
+                        left: "50%",
+                        transform: "translate(-50%, -50%)",
+                        textAlign: "center",
+                        width: "100%",
+                        color: "white",
+                        fontWeight: 700, // Set font weight to bold
+                        fontSize: "25px",
+                      }}
+                    >
+                      {overallProgress}%
+                    </div>
+                  </div>
+                  </div>
+                  <div>
+
+                  <p>Overall Monthly Progress</p>
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
 
@@ -196,6 +263,12 @@ const DashRoutine = () => {
           <div className="dash-2-2">
             <div>
               <p className="text-sm">Calorie Tracking:</p>
+            </div>
+            <div>
+              <p>HEyy;</p>
+              <p>HEyy;</p>
+              <p>HEyy;</p>
+              <p>HEyy;</p>
             </div>
           </div>
         </div>

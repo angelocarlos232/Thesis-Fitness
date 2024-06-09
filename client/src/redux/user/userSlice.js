@@ -11,9 +11,13 @@ const userSlice = createSlice({
         signInSuccess: (state, action) => {
             state.currentUser = action.payload;
         },
+        setOverallProgress: (state, action) => {
+            state.overallProgress = action.payload;
+        },
         
+
     }
 })
 
-export const {signInSuccess} = userSlice.actions;
+export const {signInSuccess, setOverallProgress} = userSlice.actions;
 export default userSlice.reducer;
