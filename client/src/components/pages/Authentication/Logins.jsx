@@ -2,13 +2,13 @@ import React, { useState, useEffect, useRef } from "react";
 import * as faceapi from "face-api.js";
 import axios from "axios";
 import Webcam from "react-webcam";
-import {useNavigate} from 'react-router-dom'
+import { useNavigate, Link } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { signInSuccess } from "../../../redux/user/userSlice";
+import toast from "react-hot-toast";
 
 
 function Login() {
-
   const dispatch = useDispatch();
 
   const [referenceImage, setReferenceImage] = useState(null);
@@ -19,6 +19,8 @@ function Login() {
   const [selectedUserId, setSelectedUserId] = useState("");
   const [isWebcamOpen, setIsWebcamOpen] = useState(false);
   const webcamRef = useRef(null);
+  const [isCapturing, setIsCapturing] = useState(false); // new state to track if capturing
+
 
   const navigate = useNavigate();
   useEffect(() => {
@@ -51,7 +53,9 @@ function Login() {
 
     if (userId) {
       try {
-        const response = await axios.get(`http://localhost:8000/api/users/users/${userId}/photo`);
+        const response = await axios.get(
+          `http://localhost:8000/api/users/users/${userId}/photo`
+        );
         const base64Photo = response.data.photo;
         const blob = base64ToBlob(base64Photo, "image/jpeg");
         const image = await faceapi.bufferToImage(blob);
@@ -72,12 +76,13 @@ function Login() {
     const screenshot = webcamRef.current.getScreenshot();
     const image = await faceapi.bufferToImage(dataURItoBlob(screenshot));
     setUserImage(image);
-    setIsWebcamOpen(false);
+    setIsWebcamOpen(true);
+    toast.success("Captured")
   };
 
   const dataURItoBlob = (dataURI) => {
-    const byteString = atob(dataURI.split(',')[1]);
-    const mimeString = dataURI.split(',')[0].split(':')[1].split(';')[0];
+    const byteString = atob(dataURI.split(",")[1]);
+    const mimeString = dataURI.split(",")[0].split(":")[1].split(";")[0];
     const ab = new ArrayBuffer(byteString.length);
     const ia = new Uint8Array(ab);
     for (let i = 0; i < byteString.length; i++) {
@@ -90,7 +95,7 @@ function Login() {
     if (!referenceImage || !userImage) {
       console.log("No images to compare");
       return;
-    } 
+    }
 
     const referenceDescriptor = await faceapi
       .detectSingleFace(referenceImage)
@@ -121,10 +126,13 @@ function Login() {
 
   const handleLoginSuccess = async () => {
     try {
-      const response = await axios.post("http://localhost:8000/api/users/api/users/login-with-id", {
-        userId: selectedUserId
-      });
-  
+      const response = await axios.post(
+        "http://localhost:8000/api/users/api/users/login-with-id",
+        {
+          userId: selectedUserId,
+        }
+      );
+
       if (response.data.success) {
         const userId = response.data.id; // Extract the user ID from the response
         dispatch(signInSuccess(response.data));
@@ -149,39 +157,70 @@ function Login() {
   };
 
   return (
-    <div className="container text-green-900">
-      
+    <div className="container text-red-600">
+      <div>
+        <Link to = '/authentication'><button className="bg-red-600 px-3 py-1 rounded-lg text-white m-6">Go back</button></Link>
+      </div>
       {modelsLoaded ? (
-        <div className="mainform">
-        <div className="flex bg-gray-500 ">
-        <div className="flex">
-          <h1>Select a user</h1>
-          <select onChange={handleUserSelection} value={selectedUserId}>
-            <option value="">Select</option>
-            {users.map(user => (
-              <option key={user.id} value={user.id}>{user.username}</option>
-            ))}
-          </select>
-          
-          <button onClick={() => setIsWebcamOpen(true)}>Open Webcam</button>
+        <div className="main-form-faceauth h-72 flex flex-col justify-center items-center">
+          <h1 className="text-2xl font-bold mb-4">Select a user</h1>
+          <div className="flex mb-4">
+            <select
+              onChange={handleUserSelection}
+              value={selectedUserId}
+              className="w-full p-2 pl-10 text-sm text-gray-700"
+            >
+              <option value="">Select</option>
+              {users.map((user) => (
+                <option key={user.id} value={user.id}>
+                  {user.username}
+                </option>
+              ))}
+            </select>
+          </div>
+          <div className="flex mb-4">
+            <button
+              onClick={() => setIsWebcamOpen(true)}
+              className="bg-red-600 hover:bg-orange-700 text-white font-bold py-2 px-4 rounded"
+            >
+              Open Webcam
+            </button>
+          </div>
           {isWebcamOpen && (
-            <div>
-              <Webcam audio={false} ref={webcamRef} screenshotFormat="image/jpeg" />
-              <button onClick={handleWebcamCapture}>Capture</button>
+            <div className="flex flex-col mb-4">
+              <Webcam
+                audio={false}
+                ref={webcamRef}
+                screenshotFormat="image/jpeg"
+                className="w-full h-48 mb-4"
+              />
+              <button
+                onClick={handleWebcamCapture}
+                className="bg-red-600 hover:bg-orange-700 text-white font-bold py-2 px-4 rounded"
+              >
+                Capture
+              </button>
             </div>
           )}
-          <button onClick={compareImages}>Compare Images</button>
-        </div>
-        </div>
+          <button
+            onClick={async () => {
+              toast.promise(compareImages(), {
+                loading: "Comparing images...",
+                success: "Login successful!",
+                error: "Login failed. Images do not match.",
+              });
+            }}
+            className="bg-red-600 hover:bg-orange-700 text-white font-bold py-2 px-4 rounded"
+          >
+            Compare Images
+          </button>
         </div>
       ) : (
         <p>Loading models...</p>
       )}
       {loginResult === "SUCCESS" && <p>Login successful!</p>}
       {loginResult === "FAILED" && <p>Login failed. Images do not match.</p>}
-      
     </div>
-    
   );
 }
 
