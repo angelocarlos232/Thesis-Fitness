@@ -4,11 +4,6 @@ const { PrismaClient } = require("@prisma/client");
 const prisma = new PrismaClient();
 const toast = require("react-hot-toast");
 
-const { SerialPort, ReadlineParser } = require('serialport');
-
-
-const arduinoPort = new SerialPort({ path: 'COM8', baudRate: 9600 }); // Adjust COM port as necessary
-const parser = arduinoPort.pipe(new ReadlineParser({ delimiter: '\n' }));
 
 
 const register = async (req, res) => {
@@ -123,16 +118,4 @@ const getProgress = async (req, res) => {
   }
 };
 
-const getHeightWeight = (req, res) => {
-  arduinoPort.write('g', (err) => {
-    if (err) {
-      return res.status(500).send('Error communicating with Arduino');
-    }
-  });
-
-  parser.once('data', (data) => {
-    res.send(data);
-  });
-};
-
-module.exports = { register, login, signout, saveProgress, getProgress, getHeightWeight };
+module.exports = { register, login, signout, saveProgress, getProgress };

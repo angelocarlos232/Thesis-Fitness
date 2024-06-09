@@ -104,33 +104,28 @@ const DashRoutine = () => {
             {workout.exercises.map((exercise, exerciseIndex) => (
               <div key={exercise.name} className="exercise-item">
                 <p className="text-base font-semibold pt-2">
-                  <a
-                    href={`https://www.youtube.com/results?search_query=${exercise.name}`}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    style={{
-                      display: "inline-flex",
-                      alignItems: "center",
-                      textDecoration: "none",
-                    }}
-                  >
-                    <span>
-                      {exerciseIndex + 1}. {exercise.name}
-                    </span>
-                    <span style={{ marginLeft: "5px" }}>
-                      <a
-                        href={`https://www.youtube.com/results?search_query=${exercise.name}`}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                      >
-                        <img
-                          src={YoutubeLogo}
-                          alt="YouTube Logo"
-                          style={{ width: "20px", height: "15px" }}
-                        />
-                      </a>
-                    </span>
-                  </a>
+                <a
+  href={`https://www.youtube.com/results?search_query=${exercise.name}`}
+  target="_blank"
+  rel="noopener noreferrer"
+  style={{
+    display: "inline-flex",
+    alignItems: "center",
+    textDecoration: "none",
+  }}
+>
+  <span>
+    {exerciseIndex + 1}. {exercise.name}
+  </span>
+  <span style={{ marginLeft: "5px" }}>
+    <img
+      src={YoutubeLogo}
+      alt="YouTube Logo"
+      style={{ width: "20px", height: "15px" }}
+    />
+  </span>
+</a>
+
                 </p>
                 <ul>
                   <li className="text-base font-light">

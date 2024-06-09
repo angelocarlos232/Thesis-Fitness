@@ -11,8 +11,6 @@ const Dashboard = () => {
   const mealsData = "4/6 meals done";
   const sleepData = "5hrs sleep";
   const { userId } = useParams();
-  const [heightWeight, setHeightWeight] = useState(null);
-
 
   const { currentUser } = useSelector((state) => state.user);
 
@@ -22,16 +20,7 @@ const Dashboard = () => {
     window.location.href = "http://localhost:3000/start/" + userId;
   };
 
-  const workoutItems = currentUser.workout
-
-  const getHeightWeight = async () => {
-    try {
-      const response = await axios.get('http://localhost:8000/api/users/getHeightWeight');
-      setHeightWeight(response.data);
-    } catch (error) {
-      console.error('Error fetching height and weight:', error);
-    }
-  };
+  const workoutItems = currentUser.workout;
 
   return (
     <div className="mx-3 my-3">
@@ -50,18 +39,20 @@ const Dashboard = () => {
             </div>
           </div>
           <div className="column">
-            <div>
-      <button className="bg-red-600 rounded-2xl text-sm mr-3 px-2 py-1" onClick={getHeightWeight}>Get Height and Weight</button>
-      {heightWeight && (
-        <div className="popup">
-          <h2>Height and Weight</h2>
-          <p>{heightWeight}</p>
-        </div>
-      )}
-    </div>
+            <button
+              className="bg-red-600 rounded-2xl text-sm mr-3 px-2 py-1"
+            >
+              Get Height and Weight
+            </button>
           </div>
           <div className="column-button ml-3">
-            {!workoutItems ? <><button onClick={startButton}>START</button></> : <></>}
+            {!workoutItems ? (
+              <>
+                <button onClick={startButton}>START</button>
+              </>
+            ) : (
+              <></>
+            )}
           </div>
         </div>
 
