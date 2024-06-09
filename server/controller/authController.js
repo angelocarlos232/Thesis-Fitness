@@ -4,8 +4,6 @@ const { PrismaClient } = require("@prisma/client");
 const prisma = new PrismaClient();
 const toast = require("react-hot-toast");
 
-
-
 const register = async (req, res) => {
   const { username, password, repeatpassword } = req.body;
 
@@ -118,4 +116,27 @@ const getProgress = async (req, res) => {
   }
 };
 
-module.exports = { register, login, signout, saveProgress, getProgress };
+const savePhoto = async (req, res) => {
+  const userId = req.params.userId;
+  const { imageData } = req.body;
+
+  // Decode base64 image data
+  const base64Data = imageData.replace(/^data:image\/jpeg;base64,/, "");
+  const binaryData = Buffer.from(base64Data, "base64");
+
+  try {
+    const updatedUser = await prisma.user.update({
+      where: { id: userId },
+      data: {
+        photo: binaryData, // Assuming you have a field named 'photo' in your user model
+      },
+    });
+    res.status(200).json({ success: true, user: updatedUser });
+  } catch (error) {
+    console.error("Error saving photo:", error);
+    res.status(500).json({ success: false, error: "Error saving photo" });
+  }
+};
+
+
+module.exports = { register, login, signout, saveProgress, getProgress, savePhoto };

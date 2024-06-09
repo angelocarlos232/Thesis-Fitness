@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import axios from "axios";
 import toast from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
@@ -16,8 +16,11 @@ const Login = ({ toggleForm }) => {
     password: "",
   });
 
+  const [showWebcam, setShowWebcam] = useState(false);
+  const [videoStream, setVideoStream] = useState(null);
+
   const handleChange = (e) => {
-    setFormData({ ...formData, [e.target.name]: e.target.value });
+    setFormData({...formData, [e.target.name]: e.target.value });
   };
 
   const loginHandler = async (e) => {
@@ -50,6 +53,31 @@ const Login = ({ toggleForm }) => {
     }
   };
 
+  const handleFaceClick = (e) => {
+    e.preventDefault();
+    setShowWebcam(true);
+    navigator.mediaDevices.getUserMedia({ video: true, audio: false })
+     .then(stream => {
+        setVideoStream(stream);
+      })
+     .catch(error => {
+        console.error("Error accessing webcam:", error);
+      });
+  };
+
+  const handleSave = () => {
+    // TO DO: implement save logic here
+    console.log("Save button clicked!");
+  };
+
+  useEffect(() => {
+    if (videoStream) {
+      const video = document.getElementById("webcam-video");
+      video.srcObject = videoStream;
+      video.play();
+    }
+  }, [videoStream]);
+
   return (
     <div className="flex items-center justify-center h-screen">
       <div className="px-1/3 ">
@@ -78,7 +106,7 @@ const Login = ({ toggleForm }) => {
                 </button>
                 <button
                   className="btn-img flex justify-center"
-                  onClick={loginHandler}
+                  onClick={handleFaceClick}
                   style={{ flex: "1" }}
                 >
                   <img
@@ -89,6 +117,12 @@ const Login = ({ toggleForm }) => {
               </div>
             </div>
           </form>
+          {showWebcam && (
+            <div className="webcam-container mt-6">
+              <video id="webcam-video" width="100%" height="100%"></video>
+              <button className="px-3 py-1 bg-red-600 rounded-lg text-white mt-6" onClick={handleSave}>Login</button>
+            </div>
+          )}
           <Button toggleForm={toggleForm} />
         </div>
       </div>

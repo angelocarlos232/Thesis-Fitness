@@ -18,5 +18,6 @@ model User {
   diet     Json?
   userID   String?
   progress  Json?
+  photo     Bytes?
 }
 

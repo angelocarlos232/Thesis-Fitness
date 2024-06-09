@@ -7,6 +7,8 @@ route.post('/register', UserController.register)
 route.post('/login', UserController.login);
 route.post('/saveprogress', UserController.saveProgress);
 route.get('/signout', UserController.signout)
+route.post('/savephoto/:userId', UserController.savePhoto)
+
 
 route.get('/progress/:userId', UserController.getProgress);
 

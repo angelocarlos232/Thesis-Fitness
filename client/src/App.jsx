@@ -12,6 +12,7 @@ import About from './components/pages/About/About'
 import Register from './components/pages/Authentication/Register';
 import PrivateRoute from './components/Private/PrivateRoute';
 import PrivateRoute2 from './components/Private/PrivateRoute2';
+import Settings from './components/pages/Settings/Settings'
 
 const MainLayout = ({ children }) => {
   return (
@@ -47,6 +48,7 @@ function App() {
           <Route path="/dashboard/:userId" element={<MainLayout><Dashboard /></MainLayout>} />
           <Route path="/workouts/:userId" element={<MainLayout><Workouts /></MainLayout>} />
           <Route path="/about/:userId" element={<MainLayout><About /></MainLayout>} />
+          <Route path="/settings/:userId" element={<MainLayout><Settings /></MainLayout>} />
         </Route>
       </Routes>
     </Router>
