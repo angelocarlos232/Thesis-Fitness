@@ -168,7 +168,7 @@ const DashRoutine = () => {
           </div>
 
           {isFullScreen && (
-            <div className="fixed top-0 left-0 w-full h-full bg-gray-900 bg-opacity-50 flex justify-center items-center">
+            <div className="fixed z-50 top-0 left-0 w-full h-full bg-gray-900 bg-opacity-50 flex justify-center items-center">
               <div className="full-screen-window  p-6 rounded-md w-11/12 h-5/6 overflow-auto">
                 <button
                   className="absolute top-0 right-0 p-2 text-lg font-bold"

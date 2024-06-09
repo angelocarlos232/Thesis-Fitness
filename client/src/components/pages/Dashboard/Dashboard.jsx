@@ -66,7 +66,7 @@ const Dashboard = () => {
           </div>
           <div className="column">
             <button
-              className="bg-red-600 rounded-2xl text-sm mr-3 px-2 py-1"
+              className="bg-red-700 rounded-2xl text-sm mr-3 px-2 py-1"
               onClick={openModal}
             >
               Get Height and Weight

@@ -10,7 +10,6 @@ const userSlice = createSlice({
     reducers: {
         signInSuccess: (state, action) => {
             state.currentUser = action.payload;
-            state.overallProgress = 50;
 
         },
         setOverallProgress: (state, action) => {

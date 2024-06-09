@@ -1,10 +1,10 @@
-import React, { useState, useRef } from "react";
-import Webcam from "react-webcam";
+import React, { useState, useEffect } from "react";
 
-function YourComponent() {
+export default function Settings() {
+
+
   const [showWebcam, setShowWebcam] = useState(false);
   const [videoStream, setVideoStream] = useState(null);
-  const webcamRef = useRef(null);
 
   const handleFaceClick = (e) => {
     e.preventDefault();
@@ -20,40 +20,64 @@ function YourComponent() {
   };
 
   const handleSave = () => {
-    const imageSrc = webcamRef.current.getScreenshot();
-    // Process the image (e.g., send it to the server)
-    console.log("Captured image: ", imageSrc);
-    setShowWebcam(false); // Hide the webcam and show the register button again
-  };
+    const userId = window.location.href.split("/settings/")[1];
+    if (videoStream) {
+      const video = document.getElementById("webcam-video");
+      const canvas = document.createElement("canvas");
+      canvas.width = video.videoWidth;
+      canvas.height = video.videoHeight;
+      const context = canvas.getContext("2d");
+      context.drawImage(video, 0, 0, canvas.width, canvas.height);
+      const imageData = canvas.toDataURL("image/jpeg");
 
+      // Send imageData to the server
+      fetch(`http://localhost:8000/api/users/savephoto/${userId}`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ imageData }),
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        console.log("Photo saved:", data);
+      })
+      .catch((error) => {
+        console.error("Error saving photo:", error);
+      });
+  }
+};
+
+  useEffect(() => {
+    if (videoStream) {
+      const video = document.getElementById("webcam-video");
+      video.srcObject = videoStream;
+      video.play();
+    }
+  }, [videoStream]);
   return (
-    <div className="container text-center">
-      {!showWebcam && (
-        <button
-          className="bg-red-600 px-3 py-1 mt-6 rounded-lg text-white"
-          onClick={handleFaceClick}
-        >
-          Register Face
-        </button>
-      )}
+    <>
+    <div className="flex justify-center items-center">
+        <div>
+      <button
+        className="bg-red-600 px-3 py-1 rounded-lg text-white"
+        onClick={handleFaceClick}
+      >
+        Register Face
+      </button>
       {showWebcam && (
-        <div className="webcam-container mt-6 flex flex-col justify-center items-center mt-24">
-          <Webcam
-            audio={false}
-            ref={webcamRef}
-            screenshotFormat="image/jpeg"
-            className="w-3/5 h-3/5"
-          />
+        <div className="webcam-container mt-6">
+          <video id="webcam-video" width="70%" height="70%"></video>
           <button
             className="px-3 py-1 bg-red-600 rounded-lg text-white mt-6"
             onClick={handleSave}
           >
-            Save
+            Register
           </button>
         </div>
       )}
-    </div>
+      </div>
+      </div>
+    </>
   );
 }
-
-export default YourComponent;
