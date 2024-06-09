@@ -7,7 +7,6 @@ import { useDispatch } from "react-redux";
 import { signInSuccess } from "../../../redux/user/userSlice";
 import toast from "react-hot-toast";
 
-
 function Login() {
   const dispatch = useDispatch();
 
@@ -19,8 +18,7 @@ function Login() {
   const [selectedUserId, setSelectedUserId] = useState("");
   const [isWebcamOpen, setIsWebcamOpen] = useState(false);
   const webcamRef = useRef(null);
-  const [isCapturing, setIsCapturing] = useState(false); // new state to track if capturing
-
+  const [isCapturing, setIsCapturing] = useState(false);
 
   const navigate = useNavigate();
   useEffect(() => {
@@ -77,7 +75,7 @@ function Login() {
     const image = await faceapi.bufferToImage(dataURItoBlob(screenshot));
     setUserImage(image);
     setIsWebcamOpen(true);
-    toast.success("Captured")
+    toast.success("Captured");
   };
 
   const dataURItoBlob = (dataURI) => {
@@ -115,12 +113,15 @@ function Login() {
 
       if (distance < 0.6) {
         setLoginResult("SUCCESS");
-        handleLoginSuccess();
+        await handleLoginSuccess();
+        toast.success("Login successful!");
       } else {
         setLoginResult("FAILED");
+        toast.error("Login failed. Images do not match.");
       }
     } else {
       setLoginResult("FAILED");
+      toast.error("Login failed. Images do not match.");
     }
   };
 
@@ -159,7 +160,11 @@ function Login() {
   return (
     <div className="container text-red-600">
       <div>
-        <Link to = '/authentication'><button className="bg-red-600 px-3 py-1 rounded-lg text-white m-6">Go back</button></Link>
+        <Link to="/authentication">
+          <button className="bg-red-600 px-3 py-1 rounded-lg text-white m-6">
+            Go back
+          </button>
+        </Link>
       </div>
       {modelsLoaded ? (
         <div className="main-form-faceauth h-72 flex flex-col justify-center items-center">
@@ -203,13 +208,7 @@ function Login() {
             </div>
           )}
           <button
-            onClick={async () => {
-              toast.promise(compareImages(), {
-                loading: "Comparing images...",
-                success: "Login successful!",
-                error: "Login failed. Images do not match.",
-              });
-            }}
+            onClick={compareImages}
             className="bg-red-600 hover:bg-orange-700 text-white font-bold py-2 px-4 rounded"
           >
             Compare Images
@@ -219,7 +218,7 @@ function Login() {
         <p>Loading models...</p>
       )}
       {loginResult === "SUCCESS" && <p>Login successful!</p>}
-      {loginResult === "FAILED" && <p>Login failed. Images do not match.</p>}
+      {loginResult === "FAILED" && <p>Images do not match.</p>}
     </div>
   );
 }

@@ -84,7 +84,7 @@ const Menu = () => {
               </li>
               <li className='flex items-center'>
                 <span className="icon-red"><SettingsIcon style={{ fontSize: 30 }} /></span>
-                <Link to={`/settings/${userId}`}><button><p className='ml-3'>Settings</p></button></Link> 
+                <Link to={`/settings/${userId}`}><button><p className='ml-3'>Register Face</p></button></Link> 
               </li>
               {currentUser && (
               <li className='flex items-center'>
