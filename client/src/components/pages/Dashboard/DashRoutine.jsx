@@ -265,10 +265,7 @@ const DashRoutine = () => {
               <p className="text-sm">Calorie Tracking:</p>
             </div>
             <div>
-              <p>HEyy;</p>
-              <p>HEyy;</p>
-              <p>HEyy;</p>
-              <p>HEyy;</p>
+
             </div>
           </div>
         </div>

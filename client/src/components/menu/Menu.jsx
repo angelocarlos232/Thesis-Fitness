@@ -57,7 +57,7 @@ const Menu = () => {
               <div className='logo-part-2'><img src={Logo} alt="Logo"></img></div>
               <div className='flex-col items-center leading-3 ml-2 text-slate-50'>
               <p className='text-l font-medium'>{currentUser ? currentUser.slug : "User"}</p>
-              <p className='text-xs'>Data example</p>
+              <p className='text-xs'>Data Example</p>
               </div></div></>) : 
               (<><div className='logo-part-2-with-user'><img src={Logo} alt="Logo"></img></div></>)}
 

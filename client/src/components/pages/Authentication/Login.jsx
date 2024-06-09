@@ -43,6 +43,7 @@ const Login = ({ toggleForm }) => {
       } else {
         setFormData({});
         dispatch(signInSuccess(data)); // Dispatch signInSuccess with user data
+        dispatch()
         console.log("User ID:", data.id); // Log the user ID
         navigate(`/dashboard/${data.id}`); // Redirect to dashboard with user ID in the URL
         toast.success("Successful Login");
