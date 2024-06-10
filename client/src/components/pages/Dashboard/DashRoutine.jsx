@@ -25,6 +25,7 @@ const DashRoutine = () => {
   };
 
   const overallProgress = useSelector((state) => state.user.overallProgress);
+  const formattedOverallProgress = overallProgress ? overallProgress.toFixed(2) : null;
 
   const fitnessGoalKey = currentUser.overview
     ? currentUser.overview.fitness_goal
@@ -246,14 +247,11 @@ const DashRoutine = () => {
                         fontSize: "25px",
                       }}
                     >
-                      {overallProgress}%
+                      {formattedOverallProgress}%
                     </div>
                   </div>
                   </div>
-                  <div>
 
-                  <p>Overall Monthly Progress</p>
-                  </div>
                 </div>
               </div>
             </div>
