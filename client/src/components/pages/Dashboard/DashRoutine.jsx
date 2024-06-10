@@ -2,10 +2,20 @@ import React, { useState } from "react";
 import { useSelector } from "react-redux";
 import YoutubeLogo from "./Youtube_logo.png";
 import CircularProgress from "@mui/material/CircularProgress"; // Import CircularProgress from Material UI
+import { Progress } from "semantic-ui-react";
+
+import "semantic-ui-css/semantic.min.css";
 
 const DashRoutine = () => {
   // const sampletext = "here is from database";
   const { currentUser } = useSelector((state) => state.user);
+  const targetWeight = currentUser.diet.gain_weight;
+
+  const currentValue = 1000;
+  const labels = `${currentUser.diet.lose_weight}       ${currentUser.diet.gain_weight}`;
+
+  const remainingValue = targetWeight - currentValue;
+  const color = remainingValue > 0 ? "red" : "black";
 
   const [isFullScreen, setIsFullScreen] = useState(false);
 
@@ -25,7 +35,9 @@ const DashRoutine = () => {
   };
 
   const overallProgress = useSelector((state) => state.user.overallProgress);
-  const formattedOverallProgress = overallProgress ? overallProgress.toFixed(2) : null;
+  const formattedOverallProgress = overallProgress
+    ? overallProgress.toFixed(2)
+    : null;
 
   const fitnessGoalKey = currentUser.overview
     ? currentUser.overview.fitness_goal
@@ -147,6 +159,32 @@ const DashRoutine = () => {
     </div>
   ) : null;
 
+  const CustomLabel = () => (
+    <div className="flex-col">
+      <div
+        style={{
+          display: "flex",
+          justifyContent: "space-between",
+          background: "#2b2b2b",
+          fontSize: "11px",
+        }}
+      >
+        <span>Lose Weight</span>
+        <span>Gain Weight</span>
+      </div>
+      <div
+        style={{
+          display: "flex",
+          justifyContent: "space-between",
+          background: "#2b2b2b",
+        }}
+      >
+        <span>{currentUser.diet.lose_weight}</span>
+        <span>{currentUser.diet.gain_weight}</span>
+      </div>
+    </div>
+  );
+
   return (
     <div className="w-full">
       <div className="dash-contents">
@@ -194,64 +232,63 @@ const DashRoutine = () => {
               <div className="flex justify-center mt-6">
                 <div className="flex-col justify-center ">
                   <div className="flex justify-center mb-3">
-                  <div
-                    className="flex justify-center items-center"
-                    style={{
-                      position: "relative",
-                      width: "120px",
-                      height: "120px",
-                    }}
-                  >
-                    {/* Main CircularProgress component */}
-                    <CircularProgress
-                      variant="determinate"
-                      value={overallProgress} // Pass overall progress percentage
-                      style={{
-                        position: "absolute",
-                        top: 0,
-                        left: 0,
-                        width: "100%",
-                        height: "100%",
-                        backgroundColor: "transparent", // Make the background transparent
-                        color: "#cc0000", // Set the color to #cc0000 (red)
-                      }}
-                    />
-
-                    {/* Secondary CircularProgress component for incomplete progress */}
-                    <CircularProgress
-                      variant="determinate"
-                      value={100} // Set to 100 to show full black track
-                      style={{
-                        position: "absolute",
-                        top: 0,
-                        left: 0,
-                        width: "100%",
-                        height: "100%",
-                        backgroundColor: "transparent", // Make the background transparent
-                        color: "black", // Set the color to black
-                        opacity: 0.1, // Adjust opacity if necessary
-                      }}
-                    />
-
-                    {/* Progress text */}
                     <div
+                      className="flex justify-center items-center"
                       style={{
-                        position: "absolute",
-                        top: "50%",
-                        left: "50%",
-                        transform: "translate(-50%, -50%)",
-                        textAlign: "center",
-                        width: "100%",
-                        color: "white",
-                        fontWeight: 700, // Set font weight to bold
-                        fontSize: "25px",
+                        position: "relative",
+                        width: "120px",
+                        height: "120px",
                       }}
                     >
-                      {formattedOverallProgress}%
+                      {/* Main CircularProgress component */}
+                      <CircularProgress
+                        variant="determinate"
+                        value={overallProgress} // Pass overall progress percentage
+                        style={{
+                          position: "absolute",
+                          top: 0,
+                          left: 0,
+                          width: "100%",
+                          height: "100%",
+                          backgroundColor: "transparent", // Make the background transparent
+                          color: "#cc0000", // Set the color to #cc0000 (red)
+                        }}
+                      />
+
+                      {/* Secondary CircularProgress component for incomplete progress */}
+                      <CircularProgress
+                        variant="determinate"
+                        value={100} // Set to 100 to show full black track
+                        style={{
+                          position: "absolute",
+                          top: 0,
+                          left: 0,
+                          width: "100%",
+                          height: "100%",
+                          backgroundColor: "transparent", // Make the background transparent
+                          color: "black", // Set the color to black
+                          opacity: 0.1, // Adjust opacity if necessary
+                        }}
+                      />
+
+                      {/* Progress text */}
+                      <div
+                        style={{
+                          position: "absolute",
+                          top: "50%",
+                          left: "50%",
+                          transform: "translate(-50%, -50%)",
+                          textAlign: "center",
+                          width: "100%",
+                          color: "white",
+                          fontWeight: 700, // Set font weight to bold
+                          fontSize: "25px",
+                        }}
+                      >
+                        {formattedOverallProgress}%
+                      </div>
                     </div>
                   </div>
-                  </div>
-
                 </div>
               </div>
             </div>
@@ -261,9 +298,18 @@ const DashRoutine = () => {
           <div className="dash-2-2">
             <div>
               <p className="text-sm">Calorie Tracking:</p>
+              <div className="mt-3">
+              <Progress
+                total={targetWeight}
+                value={currentValue}
+                label={<CustomLabel />}
+                color={color}
+              />
+              </div>
             </div>
-            <div>
-
+            <div className="flex justify-between gap-3">
+              <button className="px-3 py-1 bg-defaultRed rounded-3xl w-full">Input Calories</button>
+              <button className="px-3 py-1 h-9 bg-defaultRed rounded-3xl w-full ">Weight Log</button>
             </div>
           </div>
         </div>

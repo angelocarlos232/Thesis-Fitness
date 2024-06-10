@@ -24,7 +24,7 @@ const Dashboard = () => {
   };
 
   const fetchData = async () => {
-    const documentId = '2024061006';
+    const documentId = '2024061014';
     try {
       const docRef = doc(db, 'Sensors', documentId);
       const docSnap = await getDoc(docRef);
