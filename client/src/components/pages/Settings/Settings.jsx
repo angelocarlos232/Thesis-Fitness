@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import toast from "react-hot-toast";
 
 export default function Settings() {
 
@@ -41,6 +42,7 @@ export default function Settings() {
       .then((response) => response.json())
       .then((data) => {
         console.log("Photo saved:", data);
+        toast.success("Registration Successful")
       })
       .catch((error) => {
         console.error("Error saving photo:", error);
@@ -60,7 +62,7 @@ export default function Settings() {
     <div className="flex justify-center items-center">
         <div>
       <button
-        className="bg-red-600 px-3 py-1 rounded-lg text-white"
+        className="bg-red-600 px-3 py-1 rounded-lg text-white mt-6 h-16"
         onClick={handleFaceClick}
       >
         Register Face

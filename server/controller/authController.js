@@ -195,4 +195,37 @@ const loginWithId = async (req, res) => {
   }
 };
 
-module.exports = { register, login, signout, saveProgress, getProgress, savePhoto, getUserPhoto, getUsers, loginWithId};
+
+const addCalories = async (req,res) => {
+  const { userId, date, calories } = req.body;
+
+  try {
+    const user = await prisma.user.update({
+      where: { id: userId },
+      data: {
+        diet: {
+          push: { date, calories },
+        },
+      },
+    });
+
+    res.json({ message: 'Calories added successfully', user });
+  } catch (error) {
+    console.error('Error updating user:', error);
+    res.status(500).json({ error: 'An error occurred while adding calories' });
+  }
+};
+
+const weightLog = (req, res) => {
+  // Extract data from the request body
+  const { userId, weight } = req.body;
+
+  // Here you would typically save the weight data to your database
+  // For demonstration purposes, let's just log the data
+  console.log(`User ID: ${userId}, Weight: ${weight}`);
+
+  // Respond with a success message
+  res.status(200).json();
+};
+
+module.exports = {weightLog, register, login, signout, saveProgress, getProgress, savePhoto, getUserPhoto, getUsers, loginWithId, addCalories};

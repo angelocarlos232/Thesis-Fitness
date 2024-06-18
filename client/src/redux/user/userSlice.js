@@ -15,10 +15,13 @@ const userSlice = createSlice({
         setOverallProgress: (state, action) => {
             state.overallProgress = action.payload;
         },
+        setWeeklyProgress: (state, action) => {
+            state.weeklyProgress = action.payload;
+        },
         
 
     }
 })
 
-export const {signInSuccess, setOverallProgress} = userSlice.actions;
+export const {signInSuccess, setOverallProgress, setWeeklyProgress} = userSlice.actions;
 export default userSlice.reducer;

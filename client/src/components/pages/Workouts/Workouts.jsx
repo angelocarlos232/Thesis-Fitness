@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useSelector } from "react-redux";
 import axios from 'axios';
 import { useDispatch } from "react-redux";
-import {setOverallProgress} from '../../../redux/user/userSlice'
+import {setOverallProgress, setWeeklyProgress} from '../../../redux/user/userSlice'
 
 const fitnessGoalMapping = {
   burn_fats: "BURN FATS",
@@ -12,7 +12,9 @@ const fitnessGoalMapping = {
 };
 
 const Workouts = () => {
+  
   const { currentUser } = useSelector((state) => state.user);
+
   const [selectedWeek, setSelectedWeek] = useState(1);
   const [selectedDay, setSelectedDay] = useState(1);
   const [completedExercises, setCompletedExercises] = useState(currentUser.progress || {
@@ -187,6 +189,7 @@ const Workouts = () => {
 
   const dispatch = useDispatch();
   dispatch(setOverallProgress(overallProgress));
+  dispatch(setWeeklyProgress(progress));
   
 
   return (

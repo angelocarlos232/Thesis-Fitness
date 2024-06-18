@@ -18,6 +18,7 @@ function Login() {
   const [selectedUserId, setSelectedUserId] = useState("");
   const [isWebcamOpen, setIsWebcamOpen] = useState(false);
   const webcamRef = useRef(null);
+  const canvasRef = useRef(null);
   const [isCapturing, setIsCapturing] = useState(false);
 
   const navigate = useNavigate();
@@ -75,8 +76,38 @@ function Login() {
     const image = await faceapi.bufferToImage(dataURItoBlob(screenshot));
     setUserImage(image);
     setIsWebcamOpen(true);
+    drawFaceOutlines();
     toast.success("Captured");
   };
+
+  const drawFaceOutlines = async () => {
+    if (webcamRef.current && canvasRef.current) {
+      const video = webcamRef.current.video;
+      const detections = await faceapi.detectAllFaces(video).withFaceLandmarks();
+
+      const canvas = canvasRef.current;
+      canvas.width = video.videoWidth;
+      canvas.height = video.videoHeight;
+
+      faceapi.matchDimensions(canvas, { width: video.videoWidth, height: video.videoHeight });
+      const resizedDetections = faceapi.resizeResults(detections, { width: video.videoWidth, height: video.videoHeight });
+
+      faceapi.draw.drawDetections(canvas, resizedDetections);
+      faceapi.draw.drawFaceLandmarks(canvas, resizedDetections);
+    }
+  };
+
+  useEffect(() => {
+    let interval;
+    if (isWebcamOpen) {
+      interval = setInterval(drawFaceOutlines, 100);
+    }
+    return () => {
+      if (interval) {
+        clearInterval(interval);
+      }
+    };
+  }, [isWebcamOpen]);
 
   const dataURItoBlob = (dataURI) => {
     const byteString = atob(dataURI.split(",")[1]);
@@ -117,11 +148,11 @@ function Login() {
         toast.success("Login successful!");
       } else {
         setLoginResult("FAILED");
-        toast.error("Login failed. Images do not match.");
+        toast.error("Login failed. Faces do not match.");
       }
     } else {
       setLoginResult("FAILED");
-      toast.error("Login failed. Images do not match.");
+      toast.error("Login failed. Faces do not match.");
     }
   };
 
@@ -192,12 +223,17 @@ function Login() {
             </button>
           </div>
           {isWebcamOpen && (
-            <div className="flex flex-col mb-4">
+            <div className="flex flex-col mb-4 relative">
               <Webcam
                 audio={false}
                 ref={webcamRef}
                 screenshotFormat="image/jpeg"
                 className="w-full h-48 mb-4"
+                onUserMedia={drawFaceOutlines}
+              />
+              <canvas
+                ref={canvasRef}
+                className="absolute top-0 left-0 w-full h-48"
               />
               <button
                 onClick={handleWebcamCapture}
@@ -211,14 +247,14 @@ function Login() {
             onClick={compareImages}
             className="bg-red-600 hover:bg-orange-700 text-white font-bold py-2 px-4 rounded"
           >
-            Compare Images
+            Attempt Login
           </button>
         </div>
       ) : (
         <p>Loading models...</p>
       )}
       {loginResult === "SUCCESS" && <p>Login successful!</p>}
-      {loginResult === "FAILED" && <p>Images do not match.</p>}
+      {loginResult === "FAILED" && <p>Faces do not match.</p>}
     </div>
   );
 }

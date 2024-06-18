@@ -15,7 +15,7 @@ model User {
   slug     String?
   overview Json?
   workout  Json?
-  diet     Json?
+  diet     Json @default("{}") // Ensure this is set to JSON
   userID   String?
   progress  Json?
   photo     Bytes?

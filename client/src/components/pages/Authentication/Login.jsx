@@ -85,7 +85,6 @@ const Login = ({ toggleForm }) => {
         <div className="main-form">
           <div className="main-form-title flex justify-between">
             <h2>Login</h2>
-            <h3>Forgot Password?</h3>
           </div>
           <form>
             <div className="main-form-inputs">

@@ -1,23 +1,28 @@
 import React, { useState } from "react";
 import { useSelector } from "react-redux";
 import YoutubeLogo from "./Youtube_logo.png";
-import CircularProgress from "@mui/material/CircularProgress"; // Import CircularProgress from Material UI
+import CircularProgress from "@mui/material/CircularProgress";
 import { Progress } from "semantic-ui-react";
-
+import DatePicker from "react-datepicker";
+import "react-datepicker/dist/react-datepicker.css";
+import axios from "axios";
 import "semantic-ui-css/semantic.min.css";
+import toast from "react-hot-toast";
 
 const DashRoutine = () => {
-  // const sampletext = "here is from database";
   const { currentUser } = useSelector((state) => state.user);
-  const targetWeight = currentUser.diet.gain_weight;
-
+  const targetWeight = currentUser?.diet?.gain_weight ?? 0;
+  const loseweight = currentUser?.diet?.lose_weight ?? 0;
   const currentValue = 1000;
-  const labels = `${currentUser.diet.lose_weight}       ${currentUser.diet.gain_weight}`;
-
   const remainingValue = targetWeight - currentValue;
   const color = remainingValue > 0 ? "red" : "black";
 
   const [isFullScreen, setIsFullScreen] = useState(false);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [selectedDate, setSelectedDate] = useState(new Date());
+  const [calories, setCalories] = useState("");
+  const [isWeightLogOpen, setIsWeightLogOpen] = useState(false);
+  const [newWeight, setNewWeight] = useState("");
 
   const handleFullScreen = () => {
     setIsFullScreen(true);
@@ -27,12 +32,64 @@ const DashRoutine = () => {
     setIsFullScreen(false);
   };
 
+  const handleOpenModal = () => {
+    setIsModalOpen(true);
+  };
+
+  const handleCloseModal = () => {
+    setIsModalOpen(false);
+  };
+
+  const handleOpenWeightLog = () => {
+    setIsWeightLogOpen(true);
+  };
+
+  const handleCloseWeightLog = () => {
+    setIsWeightLogOpen(false);
+  };
+
+  const handleSaveCalories = async () => {
+    try {
+      const response = await axios.post(
+        "http://localhost:8000/api/users/addcalories",
+        {
+          userId: currentUser.id,
+          date: selectedDate,
+          calories: parseInt(calories),
+        }
+      );
+      console.log(response.data);
+      setIsModalOpen(false);
+    } catch (error) {
+      console.error("Error saving calories:", error);
+      alert("Error saving calories");
+    }
+  };
+
+  const handleSaveWeight = async () => {
+    try {
+      await axios.post("http://localhost:8000/api/users/weightLog", {
+        userId: currentUser.id,
+        weight: parseFloat(newWeight),
+      });
+      // Optionally, you can update the currentUser state here to reflect the new weight
+      // For example, if your state structure allows:
+      // updateUserWeight(parseFloat(newWeight));
+      setIsWeightLogOpen(false);
+      toast.success("Weight saved successfully");
+    } catch (error) {
+      console.error("Error saving weight:", error);
+      alert("Error saving weight");
+    }
+  };
+
   const fitnessGoalMapping = {
     burn_fats: "BURN FATS",
     cardiovascular: "CARDIOVASCULAR HEALTH",
     build_muscle: "BUILD MUSCLES",
-    // Add other mappings as needed
   };
+
+  const overallProgress1 = "300";
 
   const overallProgress = useSelector((state) => state.user.overallProgress);
   const formattedOverallProgress = overallProgress
@@ -46,11 +103,10 @@ const DashRoutine = () => {
     ? fitnessGoalMapping[fitnessGoalKey] || "No fitness goal set"
     : "No fitness goal set";
 
-  // FOR THE WORKOUT ROUTINE GENERATOR
   const workoutItems = currentUser.workout ? (
     <div className="h-full overflow-auto">
       <div className="flex flex-col items-center pt-3 pb-3">
-        <p className="text-lg font-bold text-red-600 ">GOAL:</p>
+        <p className="text-lg font-bold text-red-600">GOAL:</p>
         <p
           className="text-lg font-bold"
           style={{ wordWrap: "break-word", textAlign: "center" }}
@@ -87,7 +143,6 @@ const DashRoutine = () => {
     </div>
   ) : null;
 
-  // FOR THE WORKOUT ROUTINE GENERATOR FULL SCREEN
   const workoutItemsFullScreen = currentUser.workout ? (
     <div className="h-full overflow-auto">
       <div>
@@ -179,8 +234,8 @@ const DashRoutine = () => {
           background: "#2b2b2b",
         }}
       >
-        <span>{currentUser.diet.lose_weight}</span>
-        <span>{currentUser.diet.gain_weight}</span>
+        <span>{loseweight}</span>
+        <span>{targetWeight}</span>
       </div>
     </div>
   );
@@ -188,7 +243,6 @@ const DashRoutine = () => {
   return (
     <div className="w-full">
       <div className="dash-contents">
-        {/* Workout Routine Generation */}
         <div className="dash-1">
           <div>
             <p className="text-sm">Workout Routine Recommendation:</p>
@@ -224,7 +278,6 @@ const DashRoutine = () => {
           )}
         </div>
 
-        {/* Progress Chart */}
         <div className="dash-2">
           <div className="dash-2-1">
             <div>
@@ -298,20 +351,118 @@ const DashRoutine = () => {
           <div className="dash-2-2">
             <div>
               <p className="text-sm">Calorie Tracking:</p>
-              <div className="mt-3">
-              <Progress
-                total={targetWeight}
-                value={currentValue}
-                label={<CustomLabel />}
-                color={color}
-              />
+              <div className="mt-6">
+                <Progress
+                  total={targetWeight}
+                  value={currentValue}
+                  label={<CustomLabel />}
+                  color={color}
+                />
               </div>
             </div>
             <div className="flex justify-between gap-3">
-              <button className="px-3 py-1 bg-defaultRed rounded-3xl w-full">Input Calories</button>
-              <button className="px-3 py-1 h-9 bg-defaultRed rounded-3xl w-full ">Weight Log</button>
+              <button
+                className="px-3 py-1 bg-defaultRed rounded-3xl w-full"
+                onClick={handleOpenModal}
+              >
+                Input Calories
+              </button>
+              <button
+                className="px-3 py-1 bg-defaultRed rounded-3xl w-full h-9"
+                onClick={handleOpenWeightLog}
+              >
+                Weight Log
+              </button>
             </div>
           </div>
+
+          {/* Modal for Inputting Calories */}
+          {isModalOpen && (
+            <div className="fixed z-50 top-0 left-0 w-full h-full bg-gray-900 bg-opacity-50 flex justify-center items-center">
+              <div className="modal-window p-6 bg-defaultGray text-black  rounded-md w-1/3">
+                <h2 className="text-xl text-red-600 font-bold mb-4">
+                  Add Calories
+                </h2>
+                <div className="mb-4">
+                  <label className="block mb-2 text-white">Select Date:</label>
+                  <DatePicker
+                    selected={selectedDate}
+                    onChange={(date) => setSelectedDate(date)}
+                    className="w-full p-2 border rounded-md"
+                    dateFormat="yyyy/MM/dd"
+                    minDate={new Date()}
+                    maxDate={
+                      new Date(new Date().setDate(new Date().getDate() + 30))
+                    }
+                  />
+                </div>
+                <div className="mb-4">
+                  <label className="block mb-2 text-white">
+                    Add calories for today:
+                  </label>
+                  <input
+                    type="number"
+                    value={calories}
+                    onChange={(e) => setCalories(e.target.value)}
+                    className="w-full p-2 border rounded-md"
+                  />
+                </div>
+                <div className="flex justify-between">
+                  <button
+                    className="px-4 py-2 bg-red-600 text-white rounded-md"
+                    onClick={handleSaveCalories}
+                  >
+                    Save
+                  </button>
+                  <button
+                    className="px-4 py-2 bg-gray-300 rounded-md"
+                    onClick={handleCloseModal}
+                  >
+                    Exit
+                  </button>
+                </div>
+              </div>
+            </div>
+          )}
+
+          {/* Modal for Weight Logging */}
+          {isWeightLogOpen && (
+            <div className="fixed z-50 top-0 left-0 w-full h-full bg-gray-900 bg-opacity-50 flex justify-center items-center">
+              <div className="modal-window p-6 bg-defaultGray rounded-md w-1/3 text-black">
+                <h2 className="text-xl font-bold mb-4 text-red-600">
+                  Weight Logging
+                </h2>
+                <div className="flex-col mb-3">
+                  <p className="text-white">Weight before generating:</p>
+                  <p className="text-white">{currentUser.overview.weight}</p>
+                </div>
+                <div className="flex-col">
+                  <label className="w-full text-white">Weight now:</label>
+                  <input
+                    type="number"
+                    id="newWeight"
+                    value={newWeight}
+                    onChange={(e) => setNewWeight(e.target.value)}
+                    className="text-black h-6 p-2 border rounded-md mb-6"
+                  />
+                </div>
+                <div className="flex justify-between">
+                  <button
+                    className="px-4 py-2 bg-600-500 text-white rounded-md bg-red-600"
+                    onClick={handleSaveWeight}
+                  >
+                    Save to database
+                  </button>
+                  <button
+                    className="px-4 py-2 bg-gray-300 rounded-md"
+                    onClick={handleCloseWeightLog}
+                  >
+                    Close
+                  </button>
+                </div>
+              </div>
+            </div>
+          )}
         </div>
       </div>
     </div>
